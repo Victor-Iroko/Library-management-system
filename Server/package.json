@@ -1,0 +1,44 @@
+{
+  "name": "express-postgres-template",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --watch src --exec tsx src/app.ts",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/cookie-parser": "latest",
+    "@types/express": "latest",
+    "@types/node": "latest",
+    "prisma": "latest",
+    "ts-node": "latest",
+    "tsx": "latest",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@prisma/client": "latest",
+    "bcrypt": "latest",
+    "cookie-parser": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "express-async-errors": "latest",
+    "http-status-codes": "latest",
+    "joi": "latest",
+    "jsonwebtoken": "latest",
+    "moment": "latest",
+    "node-appwrite": "^14.1.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
+    "passport": "latest",
+    "socket.io": "^4.8.1",
+    "twilio": "^5.3.7"
+  }
+}

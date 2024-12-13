@@ -1,0 +1,142 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model user {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  phone_number String
+  role userRole @default(USER)
+  refreshToken String?
+  borrowing borrowing[]
+  reservation reservation[]
+  cart cart[]
+  notification notification[]
+  finePayment finePayment[]
+  booksRead booksRead[]
+}
+
+enum userRole {
+  ADMIN
+  LIBRARIAN
+  USER
+}
+
+model book {
+  id String @id @default(uuid())
+  title String 
+  author String
+  genre genreEnum
+  isbn String @unique
+  publication_year DateTime
+  total_copies Int @default(0)
+  status bookStatusEnum @default(Not_available)
+  borrowing borrowing[]
+  reservation reservation[]
+  cart cart[]
+  booksRead booksRead[]
+}
+
+enum genreEnum {
+  Fiction
+  Non_Fiction
+  Science_Fiction
+  Fantasy
+  Mystery
+  Romance
+  Thriller
+  Biography
+  Historical
+  Self_Help
+}
+
+enum bookStatusEnum {
+  Available
+  Not_available
+}
+
+model borrowing {
+  id String @id @default(uuid())
+  user_id String
+  user user @relation(fields: [user_id], references: [id])
+  book_id String
+  book book @relation(fields: [book_id], references: [id])
+  borrow_date DateTime @default(now())
+  due_date DateTime
+  return_date DateTime?
+  returned Boolean @default(false)
+  fine_amount Int?
+}
+
+model reservation {
+  id String @id @default(uuid())
+  user_id String
+  user user @relation(fields: [user_id], references: [id])
+  book_id String
+  book book @relation(fields: [book_id], references: [id])
+  reservation_date DateTime @default(now())
+  reservation_status reservationStatusEnum @default(Not_collected)
+}
+
+enum reservationStatusEnum {
+  Collected
+  Not_collected
+}
+
+model cart {
+  id String @id @default(uuid())
+  user_id String
+  user user @relation(fields: [user_id], references: [id])
+  book_id String
+  book book @relation(fields: [book_id], references: [id])
+  added_date DateTime @default(now())
+}
+
+model notification {
+  id String @id @default(uuid())
+  user_id String
+  user user @relation(fields: [user_id], references: [id])
+  type notificationType
+  content String @db.Text
+  is_read Boolean @default(false)
+}
+
+enum notificationType {
+  DUE_DATE
+  FINE
+  RESERVATION
+}
+
+model finePayment {
+  id String @id @default(uuid())
+  user_id String
+  user user @relation(fields: [user_id], references: [id])
+  amount Float
+  paymentDate DateTime @default(now())
+}
+
+model booksRead {
+  id String @id @default(uuid())
+  user_id String
+  user user @relation(fields: [user_id], references: [id])
+  book_id String
+  book book @relation(fields: [book_id], references: [id])
+  finished Boolean @default(false)
+  finished_date DateTime?
+  rating Int?
+  review String?
+}
