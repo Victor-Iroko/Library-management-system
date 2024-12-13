@@ -39,6 +39,7 @@
     "nodemailer": "^6.9.16",
     "passport": "latest",
     "socket.io": "^4.8.1",
+    "stripe": "^17.4.0",
     "twilio": "^5.3.7"
   }
 }

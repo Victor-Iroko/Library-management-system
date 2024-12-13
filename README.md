@@ -68,3 +68,53 @@
 - Add librarian's and other admin's
 - Define and update roles and privileges.
 - Generate system-wide reports (e.g., most borrowed books, fines collected).
+
+
+
+#### UI desgin 
+##### For users
+- Registration and login page
+- Dashboard page
+  - Current books that user is reading
+  - Books that the user has read
+  - Recommended books
+- Books page
+  - List of books categorized by genre
+  - Search functionality for book
+- When the user clicks on a book
+  - They can view the book's information
+  - They can add the book to a cart
+  - They can reserve the book for borrowing
+  - They can borrow the book
+- If they click to borrow the book
+  - A qr code will appear that the librarian can scan to verify the borrowed book
+- Profile page
+  - View and update profile information
+- Notifications page
+  - List of notifications for the user
+- Borrow page
+  - A list of books that the user has borrowed
+    - Current borrows (List of books that user has not returned)
+    - Past borrows (List of books that the user has returned)
+  - For each book also display the information like the due_date, and the fine (0 if the due_date has not passed) and a button to pay the fine
+  - At the top of the page there will be a total fine with a button to pay the fine
+    - If the user clicks the button to pay the fine then a list of borrowed books with fine will appear and the user can select how much books (and in respect fine) the user wants to pay the fine for.
+  - Cart page
+    - List of books that the user has carted 
+    - A search bar to search for books in the carted page
+    - And also a button to remove the book from the cart
+  - Reservation page
+    - List of books that the user has reserved
+    - Also show the information if the the book is available or not
+    - Also a button to remove the book from the reservation list
+    - And a search bar to search for books from the reservation list
+##### Librarians
+- Everything for user's
+- Also a page that can scan the qr code to approve a book for borrowing
+- Another page to view all the user's info (but they cannot update or delete a user's info, just view)
+  - A search bar to search for the user's info
+  - And when the person click on a user the fill information of the user comes out
+##### Admin
+- Everything for user's and librarians
+- A page that can add a user or librarian
+- The same page that can view user's info (just like in librarian) but can also update or delete a user's info
