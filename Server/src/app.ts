@@ -7,18 +7,15 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { corsOption } from './config/corsOption';
 import authRouter from 'routes/auth';
-import userRouter from 'routes/user';
-import bookRouter from 'routes/book';
-import booksReadRouter from 'routes/booksRead';
-import borrowRouter from 'routes/borrow';
-import cartRouter from 'routes/cart';
-import notificationRouter from 'routes/notification';
-import paymentRouter from 'routes/payment';
-import reservationRouter from 'routes/reservation';
 import cron from 'node-cron';
 import { checkFines, checkOverdueBorrowings, reservationsAvailable } from 'utils/email-cron-notifications';
 import { addFine } from 'utils/fine-cron';
-dotenv.config();
+import userRouter from 'routes/user';
+import booksRouter from 'routes/books';
+import borrowRouter from 'routes/borrow';
+dotenv.config()
+
+
 
 // instantiate express app
 const app = express();
@@ -41,13 +38,9 @@ app.use(express.urlencoded({extended: false}))
 // supposed to be 'api/v1/auth' instead of just 'auth'
 app.use('/auth', authRouter)
 app.use('/user', userRouter)
-app.use('/book', bookRouter)
-app.use('/booksRead', booksReadRouter)
+app.use('/books', booksRouter)
 app.use('/borrow', borrowRouter)
-app.use('/cart', cartRouter)
-app.use('/notification', notificationRouter)
-app.use('/payment', paymentRouter)
-app.use('/reservation', reservationRouter)
+
 
 // not found
 app.use(notFound)

@@ -12,6 +12,7 @@ const prisma = new PrismaClient().$extends({
 
 export const userClient = prisma.user;
 export const bookClient = prisma.book;
+export const isbnClient = prisma.isbn;
 export const borrowClient = prisma.borrowing;
 export const reservationClient = prisma.reservation;
 export const cartClient = prisma.cart;

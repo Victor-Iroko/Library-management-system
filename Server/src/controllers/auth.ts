@@ -1,23 +1,32 @@
 import { userClient } from "config/client";
 import { StatusCodes } from "http-status-codes";
 import { validator } from "utils/validator"
-import { loginUserSchema } from "validation/auth";
-import { createUserSchema } from "validation/user"
+import { loginUserSchema, registerSchema } from "utils/body-validation-schemas";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { log } from "console";
+import { userRole } from "@prisma/client";
+import ck from 'ckey'
 
 
-export const register = async (req, res) => {
-    // req.body must contain name, email, phone_number, password and confirm_password
-    req.body.role = "USER"
-    const data = await validator(req.body, createUserSchema)
-    const result = await userClient.create({ data });
-    res.status(StatusCodes.CREATED).json(result);
-}
+export const register = async (req, res, next) => {
+        const data = await validator(req.body, registerSchema);
+        // Check if the role is "ADMIN" or "LIBRARIAN"
+        if ([userRole.ADMIN, userRole.LIBRARIAN].includes(data.role)) {
+            // Ensure request is validated by `verifyJWT` and `verifyRoles` middleware
+            if (!req.role || req.role !== userRole.ADMIN) {
+                return res.status(StatusCodes.FORBIDDEN).json({
+                    message: "Only admins can register other admins or librarians",
+                });
+            }
+        }
+        // Create the user
+        const result = await userClient.create({ data });
+        return res.status(StatusCodes.CREATED).json(result);
+    }
 
 
-export const login = async (req, res) => {
+
+export const login = async (req, res) => {    
     // req.body must contain email and password
     const {email, password} = await validator(req.body, loginUserSchema)
     const user = await userClient.findUnique({where: {email: email}})
@@ -27,15 +36,15 @@ export const login = async (req, res) => {
         // create token 
         // run require('crypto').randomBytes(64).toString('hex') in command line to get random tokens
         const accessToken = jwt.sign(
-            { userInfo: { name: user.name, role: user.role } }, // payload should not be sensitive information
-            process.env.ACCESS_TOKEN,
-            { expiresIn: '5m' }
+            { userInfo: { id: user.id, role: user.role } }, // payload should not be sensitive information
+            ck.ACCESS_TOKEN,
+            { expiresIn: ck.ACCESS_TOKEN_TIME }
         );
 
         const refreshToken = jwt.sign(
-            { userInfo: { name: user.name, role: user.role } },
-            process.env.REFRESH_TOKEN,
-            { expiresIn: '1d' }
+            { userInfo: { id: user.id, role: user.role } },
+            ck.REFRESH_TOKEN,
+            { expiresIn: ck.REFRESH_TOKEN_TIME }
         );
         
         await userClient.update({
@@ -60,12 +69,12 @@ export const refreshToken = async (req, res) => {
     const refreshToken = cookies.jwt
     const user = await userClient.findFirst({where: {refreshToken: refreshToken}})
     if (!user) return res.status(StatusCodes.FORBIDDEN).json({message: "User forbidden from making this request"})
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, decoded) => {
-    if (err || user.name !== decoded.userInfo.name) return res.status(StatusCodes.FORBIDDEN)
+    jwt.verify(refreshToken, ck.REFRESH_TOKEN, (err, decoded) => {
+    if (err || user.id !== decoded.userInfo.id) return res.status(StatusCodes.FORBIDDEN)
     const accessToken = jwt.sign(
-        {userInfo: {name: user.name, role: user.role}},
-        process.env.ACCESS_TOKEN,
-        {expiresIn: '5m'}
+        {userInfo: {id: user.id, role: user.role}},
+        ck.ACCESS_TOKEN,
+        {expiresIn: ck.ACCESS_TOKEN_TIME}
     )
     
     

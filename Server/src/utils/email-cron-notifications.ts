@@ -1,6 +1,6 @@
 import { borrowClient, userClient, reservationClient, notificationClient, bookClient } from 'config/client';
 import { sendEmailNotification, sendSmsNotification } from './notification';
-import { createNotificationSchema } from 'validation/notification';
+import { createNotificationSchema } from "./body-validation-schemas";
 import { validator } from './validator';
 import { bookStatusEnum, notificationType, reservationStatusEnum } from '@prisma/client';
 

@@ -13,6 +13,11 @@ export function hashPassword() {
       await hashPasswordIfPresent(args.data);
       return query(args);
     },
+    async createMany({ model, operation, args, query }) {
+      cleanData(args.data); // removes confirm_password part
+      await hashPasswordIfPresent(args.data); // hashes the password
+      return query(args);
+    },
   };
 }
 

@@ -67,13 +67,14 @@
 - Manage user accounts (CRUD operations).
 - Add librarian's and other admin's
 - Define and update roles and privileges.
-- Generate system-wide reports (e.g., most borrowed books, fines collected).
 
+---
 
-
-#### UI desgin 
+#### UI design 
 ##### For users
 - Registration and login page
+  - Registration: `name, email, phone_number, role, password, confirm_password`
+  - Login: `email, password`
 - Dashboard page
   - Current books that user is reading
   - Books that the user has read
@@ -82,16 +83,19 @@
   - List of books categorized by genre
   - Search functionality for book
 - When the user clicks on a book
-  - They can view the book's information
-  - They can add the book to a cart
-  - They can reserve the book for borrowing
-  - They can borrow the book
-- If they click to borrow the book
+  - They can view the book's information: `title, author, genre, publication year, status, description, cover_image, borrowing inforation, reservation information, cart information, booksread (reviews) information`
+  - They can add the book to a cart or remove it
+  - They can reserve the book for borrowing or cancel reservation
+  - They can borrow the book or return it
+  - They can make a review on the book
+- If they click to borrow or return the book
   - A qr code will appear that the librarian can scan to verify the borrowed book
 - Profile page
   - View and update profile information
 - Notifications page
   - List of notifications for the user
+  - Two columns one with read the the other wuth unread
+    - When the user clicks on a notification it is automatically marked as read
 - Borrow page
   - A list of books that the user has borrowed
     - Current borrows (List of books that user has not returned)
@@ -110,10 +114,12 @@
     - And a search bar to search for books from the reservation list
 ##### Librarians
 - Everything for user's
-- Also a page that can scan the qr code to approve a book for borrowing
+- Also a page that can scan the qr code to approve a book for borrowing or returning
 - Another page to view all the user's info (but they cannot update or delete a user's info, just view)
   - A search bar to search for the user's info
-  - And when the person click on a user the fill information of the user comes out
+  - And when the person click on a user the full information of the user comes out
+- Adding, updating or deleting a book
+- Get a list of user's who have borrowed a book (when the book is clicked)
 ##### Admin
 - Everything for user's and librarians
 - A page that can add a user or librarian

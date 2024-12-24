@@ -19,7 +19,7 @@ model user {
   name String
   email String @unique
   password String
-  phone_number String
+  phone_number String?
   role userRole @default(USER)
   refreshToken String?
   borrowing borrowing[]
@@ -41,15 +41,17 @@ model book {
   title String 
   author String
   genre genreEnum
-  isbn String @unique
+  isbn isbn[]
   publication_year DateTime
-  total_copies Int @default(0)
   status bookStatusEnum @default(Not_available)
+  description String
+  cover_image Bytes?
   borrowing borrowing[]
   reservation reservation[]
   cart cart[]
   booksRead booksRead[]
 }
+
 
 enum genreEnum {
   Fiction
@@ -67,6 +69,12 @@ enum genreEnum {
 enum bookStatusEnum {
   Available
   Not_available
+}
+
+model isbn {
+  isbn String @id
+  bookId String
+  book book @relation(fields: [bookId], references: [id])
 }
 
 model borrowing {
@@ -136,7 +144,6 @@ model booksRead {
   book_id String
   book book @relation(fields: [book_id], references: [id])
   finished Boolean @default(false)
-  finished_date DateTime?
   rating Int?
   review String?
 }
