@@ -13,6 +13,7 @@ import { addFine } from 'utils/fine-cron';
 import userRouter from 'routes/user';
 import booksRouter from 'routes/books';
 import borrowRouter from 'routes/borrow';
+import { loggingMiddleware } from 'middlewares/logger';
 dotenv.config()
 
 
@@ -33,6 +34,10 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
 // app.use(express.static("src\public"))
+
+
+// logger
+app.use(loggingMiddleware)
 
 // routes
 // supposed to be 'api/v1/auth' instead of just 'auth'

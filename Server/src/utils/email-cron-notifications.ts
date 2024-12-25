@@ -3,6 +3,7 @@ import { sendEmailNotification, sendSmsNotification } from './notification';
 import { createNotificationSchema } from "./body-validation-schemas";
 import { validator } from './validator';
 import { bookStatusEnum, notificationType, reservationStatusEnum } from '@prisma/client';
+import { logger } from './logger';
 
 // Utility function to handle sending notifications and creating database entries
 const sendNotification = async (user, subject, text) => {
@@ -12,7 +13,7 @@ const sendNotification = async (user, subject, text) => {
         const data = await validator(value, createNotificationSchema);
         await notificationClient.create({ data: { ...data } });
     } catch (error) {
-        console.error(`Error sending notification to user ${user.id}:`, error);
+        logger('email-cron-notification').error(`Error sending notification to user ${user.id}:`, error)
     }
 };
 
@@ -36,9 +37,9 @@ export const checkOverdueBorrowings = async () => {
             await sendNotification(borrowing.user, subject, text);
         }
 
-        console.log(`${overdueBorrowings.length} overdue notifications sent.`);
+        logger('email-cron-notification').info(`${overdueBorrowings.length} overdue notifications sent.`)
     } catch (error) {
-        console.error('Error checking overdue borrowings:', error);
+        logger('email-cron-notification').error('Error checking overdue borrowings:', error)
     }
 };
 
@@ -67,9 +68,9 @@ export const checkFines = async () => {
             }
         }
 
-        console.log(`${usersWithFines.length} fine notifications sent.`);
+        logger('email-cron-notification').info(`${usersWithFines.length} fine notifications sent.`)
     } catch (error) {
-        console.error('Error checking fines:', error);
+        logger('email-cron-notification').error('Error checking fines:', error)
     }
 };
 
@@ -96,9 +97,9 @@ export const reservationsAvailable = async () => {
             await sendNotification(user, subject, text);
         }
 
-        console.log(`${unsatisfiedReservations.length} reservation notifications sent.`);
+        logger('email-cron-notification').info(`${unsatisfiedReservations.length} reservation notifications sent.`)
     } catch (error) {
-        console.error('Error checking reservations:', error);
+        logger('email-cron-notification').error('Error checking reservations:', error)
     }
 };
 

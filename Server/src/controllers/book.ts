@@ -233,7 +233,6 @@ export const getUsersWhoReserved = async (req, res) => {
 
 export const addISBN = async (req, res) => {
     const data = await validator(req.body, addISBNSchema)
-    console.log(data);
     
     const result = await isbnClient.create({data: {...data}})
     res.status(StatusCodes.CREATED).json(result)   

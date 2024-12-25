@@ -134,6 +134,7 @@ model finePayment {
   user_id String
   user user @relation(fields: [user_id], references: [id])
   amount Float
+  reference String
   paymentDate DateTime @default(now())
 }
 

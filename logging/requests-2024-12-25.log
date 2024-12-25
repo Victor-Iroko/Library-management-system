@@ -1,0 +1,7 @@
+2024-12-25T13:36:26.821Z [INFO]: POST /user/verify-payment/7svse0mkpz 200 - 2130ms
+2024-12-25T13:36:42.085Z [INFO]: POST /user/verify-payment/7svse0mkpz 200 - 1599ms
+2024-12-25T17:56:33.447Z [INFO]: GET /auth/refreshToken 200 - 216ms
+2024-12-25T17:57:51.615Z [INFO]: GET /auth/refreshToken 200 - 8ms
+2024-12-25T17:58:14.120Z [INFO]: POST /user/verify-payment/7svse0mkpz 200 - 1988ms
+2024-12-25T17:58:26.771Z [INFO]: GET /user/742764d1-774e-4b9f-aecf-4ffd09b7f8b5/borrow 200 - 39ms
+2024-12-25T17:58:58.747Z [INFO]: GET /user/742764d1-774e-4b9f-aecf-4ffd09b7f8b5/notifications?sortField=is_read&sortOrder=asc 403 - 10ms

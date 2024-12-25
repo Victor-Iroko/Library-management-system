@@ -45,37 +45,46 @@ export const makePayment = async (email, amount) => {
 };
 
 
-export const verifyPaymentFunction = async (reference) => {
-  const options = {
-    hostname: 'api.paystack.co',
-    port: 443,
-    path: `/transaction/verify/${reference}`,
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${ck.PAYSTACK_SECRET_KEY}`
-    }
-  }
 
-  return new Promise ((resolve, reject) => {
-    https.request(options, res => {
-      let data = ''
-  
+export const verifyPaymentFunction = (reference) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.paystack.co',
+      port: 443,
+      path: `/transaction/verify/${reference}`,
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${ck.PAYSTACK_SECRET_KEY}`, // Replace with your actual secret key
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+
       res.on('data', (chunk) => {
-        data += chunk
+        data += chunk;
       });
-  
+
       res.on('end', () => {
         try {
-          resolve(JSON.parse(data))
+          const parsedData = JSON.parse(data);
+          if (res.statusCode === 200) {
+            resolve(parsedData); // Resolve with the parsed data
+          } else {
+            reject(parsedData); // Reject with the error response
+          }
         } catch (error) {
-          reject(new Error("Invalid JSON response"))
+          reject(error); // Reject if there's a parsing error
         }
-      })
-    }).on('error', error => {
-      reject(error)
-    })
-  })
-}
+      });
+    });
 
+    req.on('error', (error) => {
+      reject(error); // Reject with the request error
+    });
+
+    req.end();
+  });
+};
 
 

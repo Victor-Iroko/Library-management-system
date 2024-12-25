@@ -1,5 +1,5 @@
 import { Prisma, userRole } from "@prisma/client";
-import { booksReadClient, borrowClient, cartClient, notificationClient, reservationClient, userClient } from "config/client";
+import { booksReadClient, borrowClient, cartClient, notificationClient, paymentClient, reservationClient, userClient } from "config/client";
 import { forbiddenError } from "errors";
 import { notFoundError } from "errors/not-found";
 import { StatusCodes } from "http-status-codes";
@@ -172,9 +172,31 @@ export const payFines = async (req, res) => {
 
 export const verifyPayment = async (req, res) => {
     const status = await verifyPaymentFunction(req.params.reference)
-    res.status(StatusCodes.OK).json(status)
 
-    // add to payment table
+    if (status['status'] === true) {
+        const transactionData = {
+          status: status['data'].status,       
+          amount: status['data'].amount,       
+          reference: status['data'].reference, 
+        };
+
+        const payment = await paymentClient.create({
+            data:{
+                user_id: req.id, 
+                amount: transactionData.amount / 100,
+                reference: transactionData.reference
+            }
+        })
+
+
+        res.status(StatusCodes.OK).json(payment)
+    } else {
+        res.status(StatusCodes.OK).json({message: "The payment was not successful"})
+    }
+
+   
+   
+
 }
 
 

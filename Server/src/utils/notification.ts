@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import twilio from 'twilio';
 import ck from 'ckey'
+import { logger } from './logger';
 
 
 // transporter
@@ -25,9 +26,9 @@ export const sendEmailNotification = async (to, subject, text) => {
     // Send email
     transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-        console.error(`Error sending email:`, error);
+        logger('email-notification').error(`Error sending email:`, error)
     } else {
-        console.log(`'Email sent:', ${info.response}`);
+        logger('email-notification').info(`'Email sent:', ${info.response}`)
     }
     });  
 }
@@ -47,6 +48,6 @@ export const sendSmsNotification = async (body, to) => {
             messagingServiceSid: ck.TWILLIO_MSG_SID,
             to: to
         })
-        .then(message => console.log(message.sid));
+        .then(message => logger('sms-notification').info(message.sid));
 }
 
